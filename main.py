@@ -2,13 +2,11 @@ viajes=[]
 def anotarNuevoViaje (): #Esta funcion se usa cuando el usuario inicia un viaje por primera vez en el programa
     print("Nuevo viaje? Ingreselo aca: ")
     origen= input("Ingrese el origen: ")
-    destino= input("Ingrese el destino: ")         #la idea seria poder mas adelante hacerlo en clase con atributos para mas ordenado
+    destino= input("Ingrese el destino: ")
     fecha=input( "Ingrese la fecha: ")
-    viaje= [origen,destino, fecha]
+    viaje= [origen,destino, fecha, []]  # agrego lista de pasajeros vacia
     viajes.append(viaje)
     print("Su viaje fue creado")
-
-
 
 def menu (): #es el menu principal, que nos terminara llevando a cada parte del programa
     opcion= ""
@@ -46,21 +44,24 @@ def eliminarViaje(): #funcion para poder eliminar un viaje cargado anteriormente
         else:
             print("El viaje ingresado no es valido")
 
-
-
 def mostrarViajeExistente (): #unicamente imprime los viajes ya cargados, para poder visualizxar lo ya caragado
     if len (viajes) == 0:
-        print("No hay iajes cargados actualmente")
+        print("No hay Viajes cargados actualmente")
     else:
         print("Tus viajes son: ")
         for i in range(len(viajes)):
             viaje = viajes[i]
             print(i + 1, "desde", viaje[0], "hasta", viaje[1], "fecha", viaje[2])
-
+            if viaje[3]:  # mostrar pasajeros si hay
+                print("   Pasajeros:")
+                for pasajero in viaje[3]:
+                    print("    -", pasajero)
+            else:
+                print("   Pasajeros: ninguno")
 
 def filtrarPorOrigen(): #funcion para filtrar con lambda y filter en la lista de viajes existentes por origen
     if len(viajes) == 0:
-        print("No hay ningún viaje cargado")
+        print("No hay ningun viaje cargado")
     else:
         origen_buscado = input("Ingrese el origen a buscar: ")
         viajes_filtrados = list(filter(lambda viaje: viaje[0] == origen_buscado, viajes))
@@ -71,3 +72,9 @@ def filtrarPorOrigen(): #funcion para filtrar con lambda y filter en la lista de
             print("Viajes encontrados:")
             for viaje in viajes_filtrados:
                 print("desde", viaje[0], "hasta", viaje[1], "fecha", viaje[2])
+                if viaje[3]:
+                    print("   Pasajeros:")
+                    for pasajero in viaje[3]:
+                        print("    -", pasajero)
+                else:
+                    print("   Pasajeros: ninguno")
