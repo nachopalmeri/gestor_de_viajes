@@ -11,15 +11,33 @@ def anotarNuevoViaje (): #Esta funcion se usa cuando el usuario inicia un viaje 
 
 
 def menu (): #es el menu principal, que nos terminara llevando a cada parte del programa
-    print ("Bienvenido a nuestro gestor de viajes")
-    print ("1 Iniciar nuevo viaje")
-    print ("2 Consulta tus viajes")
-    print ("3 Elimar vviaje")
-    print ("4 Salir del menu")
-    opcion= input ("Opcion: ")
-    
-    if opcion == "1":
-        anotarNuevoViaje()
+    opcion= ""
+    while opcion != "4":
+        print ("Bienvenido a nuestro gestor de viajes")
+        print ("1 Iniciar nuevo viaje")
+        print ("2 Consulta tus viajes")
+        print ("3 Elimar viaje")
+        print ("4 Salir del menu")
+        opcion= input ("Opcion: ")
+
+        if opcion == "1":
+            anotarNuevoViaje()
+        elif opcion=="2":
+            mostrarViajeExistente()
+        elif opcion== "3":
+            print("Falta esta funcioon")
+        elif opcion == "4":
+            print("Salir")
+        else:
+            print("Error, opcion invalida")
+
 
 
 def mostrarViajeExistente (): #unicamente imprime los viajes ya cargados, para poder visualizxar lo ya caragado
+    if len (viajes) == 0:
+        print("No hay iajes cargados actualmente")
+    else:
+        print("Tus viajes son: ")
+        for i in range(len(viajes)):
+            viaje = viajes[i]
+            print(i + 1, "desde", viaje[0], "hasta", viaje[1], "fecha", viaje[2])
