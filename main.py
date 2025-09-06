@@ -2,7 +2,7 @@ viajes=[]
 def anotarNuevoViaje (): #Esta funcion se usa cuando el usuario inicia un viaje por primera vez en el programa
     print("Nuevo viaje? Ingreselo aca: ")
     origen= input("Ingrese el origen: ")
-    destino= input("Ingrese el destino: ")
+    destino= input("Ingrese el destino: ")         #la idea seria poder mas adelante hacerlo en clase con atributos para mas ordenado
     fecha=input( "Ingrese la fecha: ")
     viaje= [origen,destino, fecha]
     viajes.append(viaje)
@@ -26,13 +26,25 @@ def menu (): #es el menu principal, que nos terminara llevando a cada parte del 
         elif opcion=="2":
             mostrarViajeExistente()
         elif opcion== "3":
-            print("Falta esta funcioon")
+            eliminarViaje()
         elif opcion == "4":
             filtrarPorOrigen()
         elif opcion == "5":
             print("Salir")
         else:
             print("Error, opcion invalida")
+
+def eliminarViaje(): #funcion para poder eliminar un viaje cargado anteriormente
+    if len (viajes)==0:
+        print("No hay viajes cargados actualmente")
+    else:
+        mostrarViajeExistente()
+        numeroAEliminar=int(input("Que numero de viaje desea eliminar?: "))
+        if 1<=numeroAEliminar<=len (viajes):
+            eliminar=viajes.pop (numeroAEliminar-1)
+            print("Se elimino el viaje que iba desde", eliminar[0], "hasta", eliminar[1], "La fecha", eliminar[2])
+        else:
+            print("El viaje ingresado no es valido")
 
 
 
@@ -45,16 +57,17 @@ def mostrarViajeExistente (): #unicamente imprime los viajes ya cargados, para p
             viaje = viajes[i]
             print(i + 1, "desde", viaje[0], "hasta", viaje[1], "fecha", viaje[2])
 
-def filtrarPorOrigen():  #esta funcion la usamos si el usuario desea filtrar los viajes existentes y encontrar por origen
+
+def filtrarPorOrigen(): #funcion para filtrar con lambda y filter en la lista de viajes existentes por origen
     if len(viajes) == 0:
         print("No hay ningún viaje cargado")
     else:
         origen_buscado = input("Ingrese el origen a buscar: ")
-        viajes_filtrados = list(filter(lambda viaje: viaje.origen == origen_buscado, viajes))
+        viajes_filtrados = list(filter(lambda viaje: viaje[0] == origen_buscado, viajes))
 
         if len(viajes_filtrados) == 0:
             print("No hay viajes desde", origen_buscado)
         else:
             print("Viajes encontrados:")
             for viaje in viajes_filtrados:
-                print(viaje)
+                print("desde", viaje[0], "hasta", viaje[1], "fecha", viaje[2])
