@@ -19,5 +19,19 @@ def ingreso_pasajeros():
             print("Opcion no valida.")
 
 
+def cargar_pasajero(lista_pasajeros):
+    nombre = input("nombre del pasajero: ")
+    dni = input("dni del pasajero: ")
+    asiento = input("numero de asiento: ")
+    
+    pasajero = {
+        "nombre": nombre,
+        "dni": dni,
+        "asiento": asiento
+    }
+
+    lista_pasajeros.append(pasajero)
+    print("Pasajero agregado correctamente.")
+
 
 ingreso_pasajeros()
