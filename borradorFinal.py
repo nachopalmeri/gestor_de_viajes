@@ -160,3 +160,39 @@ def menu ():
 
 menu()
 
+<<<<<<< HEAD
+=======
+def reservar_asiento():
+
+    asientos_disponibles = list(range(1,101)) #lista con los asientos disponibles (100 es un ejemplo)
+    reserva = []
+    salir = False
+
+    while salir == False:
+        print("Asientos disponibles:")
+        print(asientos_disponibles) # se muestra la lista
+
+        elegir_asiento = input("¿Qué asiento desea elegir? ('salir' para terminar): ") #El pasajero elige el asiento
+
+        if elegir_asiento == "salir": #si escribe 'salir' sale
+            salir = True
+        
+        else:
+            asiento = int(elegir_asiento)
+
+            if asiento not in asientos_disponibles:
+                print("Ese asiento esta ocupado o no existe.")
+            
+            else:
+                reserva.append(asiento) #Agrega el asiento que elegiste en tu reserva
+                for i in range(len(asientos_disponibles)):
+                    if asientos_disponibles[i] == asiento: #Aca recorre la lista e intercambia el asiento elegido por una X
+                        asientos_disponibles[i] = 'X'
+                
+    return reserva , asientos_disponibles
+
+mis_reservas, asientos_libres = reservar_asiento()
+
+print("Su reserva es:", mis_reservas)
+print("Asientos disponibles:",asientos_libres)
+>>>>>>> 3a6011c38dff82bc3f8aa82364154dbeb6472f06
