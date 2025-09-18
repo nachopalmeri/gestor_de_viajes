@@ -3,7 +3,7 @@ import re   #la usamos para validar el dni
 viajes = []  # lista que gurda todos los viajes
 
 
-def menu(): # funcion principal que nos lleva a cada parte del proograma.
+def menu(): # funcion principal que nos lleva a cada parte del programa.
     opcion = ""
     while opcion != "6":  # se repite hasta que el usuario elija salir (opcion 6)
         print("Bienvenido a nuestro gestor de viajes")
@@ -93,22 +93,24 @@ def filtrarPorOrigen():  # busca viajes por origen
                 print("Asientos:", viaje["asientos"])
     input("Presione Enter para volver al menu.")
 
-
-def cargarPasajerosEnViaje():  # permite cargar pasajeros a un viaje ya creado
+def cargarPasajerosEnViaje():  # permite cargar pasajeros a un viaje ya creado 
     if len(viajes) == 0:
         print("No hay viajes cargados actualmente")
     else:
         print("Seleccione el numero de viaje para cargar pasajeros:")
-        for i, viaje in enumerate(viajes):  # muestra lista de viajes con numeros
-            print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"])
+        i = 0
+        for viaje in viajes:  # recorre cadav viaje de la lista de viajes
+            print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"]) #muestra el numero del viaje  y los datos (origen,destino y fecha)
+            i += 1
         num = int(input("Numero de viaje: "))
         if 1 <= num <= len(viajes):
             viaje = viajes[num - 1]  # selecciona el viaje elegido
             print("Cargando pasajeros en el viaje desde", viaje["origen"], "hasta", viaje["destino"])
-            reservar_asiento(viaje["asientos"], viaje["pasajeros"])  # llama a la función de reservar asiento
+            reservar_asiento(viaje["asientos"], viaje["pasajeros"])  # llama a la funcion de reservar asiento
         else:
             print("Numero no valido.")
     input("Presione Enter para volver al menu.")
+
 
 
 def reservar_asiento(asientos_disponibles, lista_pasajeros):  # proceso de reservar un asiento
