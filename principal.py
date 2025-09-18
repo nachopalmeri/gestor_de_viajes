@@ -37,7 +37,7 @@ def anotarNuevoViaje(): # cuando queremos iniciar un nuevo viaje llamamos a esta
     origen = input("Ingrese el origen : ")   # pide origen
     destino = input("Ingrese el destino : ") # pide destino
     fecha = input("Ingrese la fecha : ")     # pide fecha
-
+    
     asientos = list(range(1, 21))  # crea lista de asientos del 1 al 20
     # se guarda todo en un diccionario con los datos del viaje
     viaje = {"origen": origen, "destino": destino, "fecha": fecha, "asientos": asientos, "pasajeros": []}
