@@ -36,9 +36,7 @@ def menu():
         else:
             print("Error, opción inválida") 
 
-<<<<<<< HEAD
-menu() #llamado al menu principal para iniciar el programa
-=======
+
 
 def anotarNuevoViaje():
     """Inicia un nuevo viaje.
@@ -218,4 +216,4 @@ def mostrarPasajeros(viaje):
 
 
 menu()  # se llama al menú principal para iniciar el programa
->>>>>>> cddcf10023feaa9b511f4ec9aaf5651e28b9d9b3
+
