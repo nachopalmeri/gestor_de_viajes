@@ -10,13 +10,13 @@ def menu():
     """
     opcion = ""
     while opcion != "6":  # se repite hasta que el usuario elija salir (opcion 6)
-        print("Bienvenido a nuestro gestor de viajes")
-        print("1 Iniciar nuevo viaje")
-        print("2 Consultar tus viajes")
-        print("3 Eliminar viaje")
-        print("4 Filtrar viaje por origen")
-        print("5 Cargar pasajeros en viaje existente")
-        print("6 Salir")
+        print("Bienvenido a nuestro gestor de viajes.")
+        print("1 Iniciar nuevo viaje.")
+        print("2 Consultar tus viajes.")
+        print("3 Eliminar viaje.")
+        print("4 Filtrar viaje por origen.")
+        print("5 Cargar pasajeros en viaje existente.")
+        print("6 Salir.")
         opcion = input("Opción: ")
 
        
@@ -33,7 +33,7 @@ def menu():
         elif opcion == "6":
             print("Salir")  # sale del programa
         else:
-            print("Error, opción inválida") 
+            print("Error, opción inválida.") 
 
 
 def anotarNuevoViaje():
@@ -42,10 +42,10 @@ def anotarNuevoViaje():
     Guarda los datos en un diccionario y lo agrega a la lista general de viajes.
     Luego permite reservar asientos.
     """
-    print("Nuevo viaje? Ingreselo aca : ")
-    origen = input("Ingrese el origen : ")   
-    destino = input("Ingrese el destino : ") 
-    fecha = input("Ingrese la fecha : ")     
+    print("Nuevo viaje? Ingreselo aca: ")
+    origen = input("Ingrese el origen: ")   
+    destino = input("Ingrese el destino: ") 
+    fecha = input("Ingrese la fecha: ")     
     
     asientos = list(range(1, 21))  # crea lista de asientos del 1 al 20
     viaje = {"origen": origen, "destino": destino, "fecha": fecha, "asientos": asientos, "pasajeros": []}
@@ -53,8 +53,8 @@ def anotarNuevoViaje():
 
     print("Ahora puede reservar asientos para este viaje:")
     reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
-    print("Su viaje fue creado , Muchas gracias.")
-    input("Presione Enter para volver al menu.")
+    print("Su viaje fue creado. Muchas gracias.")
+    input("Presione Enter para volver al menú.")
 
 
 def mostrarViajeExistente():
@@ -64,7 +64,7 @@ def mostrarViajeExistente():
     pasajeros y asientos disponibles.
     """
     if len(viajes) == 0:  
-        print("No hay Viajes cargados actualmente")
+        print("No hay Viajes cargados actualmente.")
     else:
         indice = 1  
         for viaje in viajes:
@@ -73,7 +73,7 @@ def mostrarViajeExistente():
             mostrarPasajeros(viaje)  
             print("Asientos:", viaje["asientos"])  
             indice += 1
-    input("Presione Enter para volver al menu.")
+    input("Presione Enter para volver al menú.")
 
 
 def eliminarViaje():
@@ -82,7 +82,7 @@ def eliminarViaje():
     y lo elimina si es válido.
     """
     if len(viajes) == 0:
-        print("No hay viajes cargados actualmente")
+        print("No hay viajes cargados actualmente.")
     else:
         mostrarViajeExistente()  
         numeroAEliminar = int(input("Que numero de viaje desea eliminar?: "))  
@@ -90,8 +90,8 @@ def eliminarViaje():
             eliminar = viajes.pop(numeroAEliminar - 1) 
             print("Se eliminó el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
         else:
-            print("El viaje ingresado no es valido")
-    input("Presione Enter para volver al menu.")
+            print("El viaje ingresado no es valido.")
+    input("Presione Enter para volver al menú.")
 
 
 def filtrarPorOrigen():
@@ -100,7 +100,7 @@ def filtrarPorOrigen():
     Si no hay coincidencias, informa al usuario.
     """
     if len(viajes) == 0:
-        print("No hay ningún viaje cargado")
+        print("No hay ningún viaje cargado.")
     else:
         origen_buscado = input("Ingrese el origen a buscar: ")  # pide el origen que quiera buscar
         viajes_filtrados = list(filter(lambda viaje: viaje["origen"] == origen_buscado, viajes))  # filtra viajes
@@ -121,9 +121,9 @@ def cargarPasajerosEnViaje():
     y permite reservar asientos en el viaje seleccionado.
     """
     if len(viajes) == 0:
-        print("No hay viajes cargados actualmente")
+        print("No hay viajes cargados actualmente.")
     else:
-        print("Seleccione el numero de viaje para cargar pasajeros:")
+        print("Seleccione el número de viaje para cargar pasajeros:")
         i = 0
         for viaje in viajes:  
             print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"]) #muestra el numero del viaje  y los datos (origen,destino y fecha)
@@ -134,8 +134,8 @@ def cargarPasajerosEnViaje():
             print("Cargando pasajeros en el viaje desde", viaje["origen"], "hasta", viaje["destino"])
             reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
         else:
-            print("Numero no valido.")
-    input("Presione Enter para volver al menu.")
+            print("Numero no válido.")
+    input("Presione Enter para volver al menú.")
 
 
 def reservar_asiento(asientos_disponibles, lista_pasajeros):
