@@ -45,7 +45,7 @@ def menu():
             print("\nSaliendo del programa...\n")  # sale del programa
         else:
             print("\nError, opción inválida.\n")
-            input("Enter para continuar...") 
+            input("Enter para continuar...")
 
 
 def anotarNuevoViaje():
@@ -149,21 +149,29 @@ def cargarPasajerosEnViaje():
     clear()
     titulo("CARGAR PASAJEROS")
 
-    if len(viajes) == 0:
-        print("\nNo hay viajes cargados actualmente.\n")
-    else:
-        print("\nSeleccione el número de viaje para cargar pasajeros:")
-        i = 0
-        for viaje in viajes:  
-            print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"]) #muestra el numero del viaje  y los datos (origen,destino y fecha)
-            i += 1
-        num = int(input("Numero de viaje: "))
-        if 1 <= num <= len(viajes):
-            viaje = viajes[num - 1] 
-            print("Cargando pasajeros en el viaje desde", viaje["origen"], "hasta", viaje["destino"])
-            reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
+    bandera = True
+    while bandera:
+        if len(viajes) == 0:
+            print("\nNo hay viajes cargados actualmente.\n")
         else:
-            print("\nNumero no válido.\n")
+            try:
+                print("\nSeleccione el número de viaje para cargar pasajeros:")
+                i = 0
+                for viaje in viajes:  
+                    print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"]) #muestra el numero del viaje  y los datos (origen,destino y fecha)
+                    i += 1
+                num = int(input("Numero de viaje: "))
+                if 1 <= num <= len(viajes):
+                    viaje = viajes[num - 1] 
+                    print("Cargando pasajeros en el viaje desde", viaje["origen"], "hasta", viaje["destino"])
+                    reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
+                    bandera = False
+                else:
+                    print("\nNumero no válido.\n")
+
+            except ValueError:
+                print("ERROR. Seleccione una opción válida.")
+
     input("\nEnter para volver al menú...")
 
 
@@ -238,7 +246,7 @@ def mostrarPasajeros(viaje):
     if viaje["pasajeros"]:  # si hay pasajeros
         print("   Pasajeros:")
         for pasajero in viaje["pasajeros"]:
-            print("    -", pasajero["nombre"], "-", pasajero["dni"], "- asiento", pasajero["asiento"])
+            print("    -", pasajero["nombre"], "-", pasajero["dni"], "- asiento", pasajero["asiento"], "-")
     else:
         print("   Pasajeros: No hay pasajeros cargados.")  # si no hay pasajeros
 
