@@ -1,5 +1,7 @@
 import re   # la usamos para validar el dni
 import os   # la usamos para limpiar la pantalla
+from datetime import datetime #la usamos para que no se pueda sacar vuelos para fechas pasadas
+
 
 # Funciones visuales
 
@@ -91,16 +93,35 @@ def anotarNuevoViaje():
     
     origen = input("\nIngrese el origen: ")   
     destino = input("Ingrese el destino: ") 
-    fecha = input("Ingrese la fecha: ")     
-    
-    asientos = list(range(1, 21))  # crea lista de asientos del 1 al 20
-    viaje = {"origen": origen, "destino": destino, "fecha": fecha, "asientos": asientos, "pasajeros": []}
+
+    fechaValida = False
+    while fechaValida == False:
+        fecha_ingresada = input("Ingrese la fecha (dd/mm/aaaa): ")
+        try:
+            fechaConvertida = datetime.strptime(fecha_ingresada, "%d/%m/%Y").date()
+            hoy = datetime.now().date()
+            if fechaConvertida < hoy:
+                print("\nLa fecha ingresada ya pasó. Ingrese una fecha futura.\n")
+            else:
+                fecha_valida = True
+        except ValueError:
+            print("\nFormato inválido. Use el formato dd/mm/aaaa.\n")
+
+    asientos = list(range(1, 21))  
+    viaje = {
+        "origen": origen,
+        "destino": destino,
+        "fecha": fecha_ingresada,
+        "asientos": asientos,
+        "pasajeros": []
+    }
     viajes.append(viaje) 
 
     print("\nViaje creado correctamente.\n")
     print("Ahora puede reservar asientos para este viaje:")
     reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
     input("\nPresione Enter para volver al menú...")
+
 
 
 def mostrarViajeExistente():
