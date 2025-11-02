@@ -1,5 +1,16 @@
 
 import re   # la usamos para validar el dni
+<<<<<<< HEAD
+=======
+import os   # la usamos para limpiar la pantalla
+
+# Funciones visuales
+
+clear = lambda: os.system('cls' if os.name == 'nt' else 'clear') # Función para limpiar la pantalla
+separacion = lambda ancho = 64, ch = '-': print(ch * ancho) # Función para generar guiones
+titulo = lambda txt: (separacion(), print(" " * ((64 - len(txt)) // 2) + txt), separacion()) # Función para crear títulos
+
+>>>>>>> main
 
 viajes = []  
 
@@ -11,6 +22,7 @@ def menu():
     """
     opcion = ""
     while opcion != "6":  # se repite hasta que el usuario elija salir (opcion 6)
+<<<<<<< HEAD
         print("Bienvenido a nuestro gestor de viajes")
         print("1 Iniciar nuevo viaje")
         print("2 Consultar tus viajes")
@@ -19,6 +31,19 @@ def menu():
         print("5 Cargar pasajeros en viaje existente")
         print("6 Salir")
         opcion = input("Opción: ")
+=======
+        clear()
+        titulo("GESTOR DE VIAJES")
+    
+        print("\n1) Iniciar nuevo viaje.")
+        print("2) Consultar tus viajes.")
+        print("3) Eliminar viaje.")
+        print("4) Filtrar viaje por origen.")
+        print("5) Cargar pasajeros en viaje existente.")
+        print("6) Salir.\n")
+        separacion()
+        opcion = input("\nOpción: ")
+>>>>>>> main
 
        
         if opcion == "1":
@@ -32,9 +57,16 @@ def menu():
         elif opcion == "5":
             cargarPasajerosEnViaje()
         elif opcion == "6":
+<<<<<<< HEAD
             print("Salir")  # sale del programa
         else:
             print("Error, opción inválida") 
+=======
+            print("\nSaliendo del programa...\n")  # sale del programa
+        else:
+            print("\nError, opción inválida.\n")
+            input("Enter para continuar...") 
+>>>>>>> main
 
 <<<<<<< HEAD
 menu() #llamado al menu principal para iniciar el programa
@@ -80,6 +112,7 @@ def mostrarViajeExistente():
     input("Presione Enter para volver al menu.")
 
 
+menu() #llamado al menu principal para iniciar el programa
 def eliminarViaje():
     """Elimina un viaje de la lista.
     Muestra los viajes existentes, pide el número del viaje a eliminar
@@ -88,6 +121,7 @@ def eliminarViaje():
     if len(viajes) == 0:
         print("No hay viajes cargados actualmente")
     else:
+<<<<<<< HEAD
         mostrarViajeExistente()  
         numeroAEliminar = int(input("Que numero de viaje desea eliminar?: "))  
         if 1 <= numeroAEliminar <= len(viajes):
@@ -96,6 +130,28 @@ def eliminarViaje():
         else:
             print("El viaje ingresado no es valido")
     input("Presione Enter para volver al menu.")
+=======
+        print("\nViajes cargados:")
+        indice = 1
+        for viaje in viajes:
+            print(indice, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"])
+            mostrarPasajeros(viaje)
+            print("\nAsientos:", viaje["asientos"])
+            separacion()
+            indice += 1
+
+        try:
+            numeroAEliminar = int(input("\n¿Qué número de viaje desea eliminar?: "))
+            if 1 <= numeroAEliminar <= len(viajes):
+                eliminar = viajes.pop(numeroAEliminar - 1)
+                print("\nSe eliminó el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
+            else:
+                print("\nEl viaje ingresado no es válido.\n")
+        except ValueError:
+            print("\nError: debe ingresar un número válido.")
+
+    input("\nEnter para volver al menú...")
+>>>>>>> main
 
 
 def filtrarPorOrigen():
@@ -217,4 +273,8 @@ def mostrarPasajeros(viaje):
         print("   Pasajeros: No hay pasajeros cargados.")  # si no hay pasajeros
 
 
+<<<<<<< HEAD
 menu()  # se llama al menú principal para iniciar el programa
+=======
+menu()  # se llama al menú principal para iniciar el programa
+>>>>>>> main
