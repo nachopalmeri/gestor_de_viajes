@@ -27,47 +27,74 @@ def validar_numero(mensaje):
             num = int(input(mensaje))
             return num
         except:
-            print("Debe ingresar un número válido.")
+            print("Debe ingresar un numero valido.")
 
+
+def validar_asiento(asientos_disponibles):
+    """Valida que el asiento exista y este disponible.
+    """""
+    while True:
+        try:
+            num = int(input("Ingrese el numero de asiento: "))
+            if num in asientos_disponibles:
+                return num
+            else:
+                print("Ese asiento no existe o ya esta ocupado.")
+        except:
+            print("Debe ingresar un número valido.")
 
 
 viajes = []  
 def guardarViajesArchivo():
     """Guarda todos los viajes en un archivo de texto.
-    Convierte los diccionarios de viajes y pasajeros en texto legible y los guarda línea por línea."""
+    Convierte los diccionarios de viajes y pasajeros en texto legible y los guarda línea por línea.
+    """
     with open("viajes.txt", "w") as f:
         for v in viajes:
             asientos_txt = "|".join(map(str, v["asientos"]))
             pasajeros_txt = "|".join([f'{p["nombre"]}-{p["dni"]}-{p["asiento"]}' for p in v["pasajeros"]])
             f.write(f'{v["origen"]},{v["destino"]},{v["fecha"]},{asientos_txt},{pasajeros_txt}\n')
 
-
 def cargarViajesArchivo():
     """Carga los viajes desde el archivo de texto.
-    Reconstruye los diccionarios con los datos almacenados previamente."""
+    Reconstruye los diccionarios con los datos almacenados previamente.
+    """
     try:
         with open("viajes.txt", "r") as f:
             for linea in f:
                 partes = linea.strip().split(',')
                 if len(partes) < 5:
-                    continue  
+                    continue
                 origen, destino, fecha, asientos_txt, pasajeros_txt = partes
                 asientos = [int(x) if x.isdigit() else x for x in asientos_txt.split('|')]
                 pasajeros = []
-                if pasajeros_txt.strip():  
+                if pasajeros_txt.strip():
                     for p in pasajeros_txt.split('|'):
                         nombre, dni, asiento = p.split('-')
                         pasajeros.append({"nombre": nombre, "dni": dni, "asiento": int(asiento)})
-                duplicado = any(v["origen"] == origen and v["destino"] == destino and v["fecha"] == fecha for v in viajes)
+                duplicado = any(
+                    v["origen"] == origen and v["destino"] == destino and v["fecha"] == fecha
+                    for v in viajes
+                )
                 if not duplicado:
-                    viajes.append({"origen": origen, "destino": destino, "fecha": fecha, "asientos": asientos, "pasajeros": pasajeros})
+                    viajes.append({
+                        "origen": origen,
+                        "destino": destino,
+                        "fecha": fecha,
+                        "asientos": asientos,
+                        "pasajeros": pasajeros
+                    })
     except FileNotFoundError:
-        pass  
+        print("Archivo de viajes no encontrado, se creara uno nuevo al guardar.")
+    except Exception as e:
+        print("Ocurrio un error al cargar los viajes:", e)
+
 
 
 def menu():
     """Función principal que muestra el menú del programa.
-    Carga los viajes desde archivo al iniciar y los guarda al salir."""
+    Carga los viajes desde archivo al iniciar y los guarda al salir.
+    """
     cargarViajesArchivo()  
 
     opcion = ""
@@ -165,12 +192,12 @@ def mostrarViajeExistente():
             print("\nAsientos:", viaje["asientos"])  
             indice += 1
             separacion()
-    input("\nEnter para volver al menú...")
+    input("\nEnter para volver al menu..")
 
 
 def eliminarViaje():
     """Elimina un viaje de la lista.
-    Muestra los viajes existentes, pide el número del viaje a eliminar
+    Muestra los viajes existentes, pide el numero del viaje a eliminar
     y lo elimina si es válido.
     """
     clear()
@@ -187,16 +214,7 @@ def eliminarViaje():
             print("\nSe eliminó el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
         else:
             print("\nEl viaje ingresado no es valido.\n")
-        try:
-            numeroAEliminar = int(input("\nQue numero de viaje desea eliminar?: "))  
-            if 1 <= numeroAEliminar <= len(viajes):
-                eliminar = viajes.pop(numeroAEliminar - 1) 
-                print("\nSe elimino el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
-            else:
-                print("\nEl viaje ingresado no es valido.\n")
-        except ValueError:
-            print("\nDebe ingresar un número válido.\n")
-    input("\nEnter para volver al menú...")
+    input("\nEnter para volver al menu...")
 
 
 def filtrarPorOrigen():
@@ -263,17 +281,11 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros):
     while salir == False:
         print("\nAsientos disponibles:\n")
         print(asientos_disponibles)  
-
-        elegir_asiento = input("\n¿Que asiento desea elegir? ('salir' para terminar): ").lower()
-
-        if elegir_asiento == "salir": 
+        opcion = input("\n¿Desea elegir un asiento? (s/n): ").lower()
+        if opcion == "n":
             salir = True
         else:
-            if not elegir_asiento.isdigit(): 
-                print("\nIngrese un numero de asiento valido.")
-                continue
-
-            asiento = int(elegir_asiento)  
+            asiento = validar_asiento(asientos_disponibles)
 
             if asiento not in asientos_disponibles: 
                 print("\nEse asiento esta ocupado o no existe.\n")
