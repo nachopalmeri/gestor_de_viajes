@@ -284,6 +284,9 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros):
         opcion = input("\n¿Desea elegir un asiento? (s/n): ").lower()
         if opcion == "n":
             salir = True
+        elif opcion != "s" :
+            print("Ingrese solo s/n para continuar :")
+            opcion = input("\n¿Desea elegir un asiento? (s/n): ").lower()
         else:
             asiento = validar_asiento(asientos_disponibles)
 
@@ -302,7 +305,7 @@ def cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento):
     nombre = input("\nNombre del pasajero: ")   
     dni = input("DNI del pasajero: ")       
 
-    while not re.search("^[0-9]{7,8}$", dni):
+    while not re.search("^[0-9]{9}$", dni):
         print("\nDNI no valido. Ingrese solo 9 numeros.")
         dni = input("DNI del pasajero: ")
 
