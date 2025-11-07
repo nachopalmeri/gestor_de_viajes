@@ -20,6 +20,15 @@ def validar_opcion():
             print("Error: debe ingresar un numero entre 1 y 6.")
 
 
+def validar_numero(mensaje):
+    """Pide un numero entero y controla errores."""
+    while True:
+        try:
+            num = int(input(mensaje))
+            return num
+        except:
+            print("Debe ingresar un número válido.")
+
 
 
 viajes = []  
@@ -170,8 +179,9 @@ def eliminarViaje():
     if len(viajes) == 0:
         print("\nNo hay viajes cargados actualmente.\n")
     else:
-        mostrarViajeExistente()  
-        numeroAEliminar = int(input("\nQue numero de viaje desea eliminar?: "))  
+        mostrarViajeExistente()
+        numeroAEliminar = validar_numero("\nIngrese el numero de viaje a eliminar: ")
+
         if 1 <= numeroAEliminar <= len(viajes):
             eliminar = viajes.pop(numeroAEliminar - 1) 
             print("\nSe eliminó el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
