@@ -1,16 +1,25 @@
 import re   # la usamos para validar el dni
 import os   # la usamos para limpiar la pantalla
-<<<<<<< HEAD
-=======
-from datetime import datetime #la usamos para que no se pueda sacar vuelos para fechas pasadas
 
->>>>>>> main
+from datetime import datetime #la usamos para que no se pueda sacar vuelos para fechas pasadas
 
 # Funciones visuales
 
 clear = lambda: os.system('cls' if os.name == 'nt' else 'clear')
 separacion = lambda ancho = 64, ch = '-': print(ch * ancho)
 titulo = lambda txt: (separacion(), print(" " * ((64 - len(txt)) // 2) + txt), separacion())
+
+
+def validar_opcion():
+    """Pide una opcion valida del menu (1 al 6)."""
+    while True:
+        opcion = input("Opcion: ")
+        if opcion in ["1", "2", "3", "4", "5", "6"]:
+            return opcion
+        else:
+            print("Error: debe ingresar un numero entre 1 y 6.")
+
+
 
 
 viajes = []  
@@ -64,7 +73,9 @@ def menu():
         print("5) Cargar pasajeros en viaje existente.")
         print("6) Salir.\n")
         separacion()
-        opcion = input("\nOpción: ")
+        opcion = validar_opcion()
+
+    
 
        
         if opcion == "1":
@@ -93,13 +104,6 @@ def anotarNuevoViaje():
     """
     clear()
     titulo("NUEVO VIAJE")
-<<<<<<< HEAD
-    
-    origen = input("\nIngrese el origen: ")   
-    destino = input("Ingrese el destino: ") 
-    fecha = input("Ingrese la fecha: ")     
-=======
->>>>>>> main
     
     origen = input("\nIngrese el origen: ")   
     destino = input("Ingrese el destino: ") 
@@ -111,7 +115,7 @@ def anotarNuevoViaje():
             fechaConvertida = datetime.strptime(fecha_ingresada, "%d/%m/%Y").date()
             hoy = datetime.now().date()
             if fechaConvertida < hoy:
-                print("\nLa fecha ingresada ya pasó. Ingrese una fecha futura.\n")
+                print("\nLa fecha ingresada ya paso. Ingrese una fecha futura.\n")
             else:
                 fechaValida = True
         except ValueError:
@@ -130,7 +134,7 @@ def anotarNuevoViaje():
     print("\nViaje creado correctamente.\n")
     print("Ahora puede reservar asientos para este viaje:")
     reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
-    input("\nPresione Enter para volver al menú...")
+    input("\nPresione Enter para volver al menu.")
 
 
 def mostrarViajeExistente():
@@ -167,24 +171,21 @@ def eliminarViaje():
         print("\nNo hay viajes cargados actualmente.\n")
     else:
         mostrarViajeExistente()  
-<<<<<<< HEAD
         numeroAEliminar = int(input("\nQue numero de viaje desea eliminar?: "))  
         if 1 <= numeroAEliminar <= len(viajes):
             eliminar = viajes.pop(numeroAEliminar - 1) 
             print("\nSe eliminó el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
         else:
             print("\nEl viaje ingresado no es valido.\n")
-=======
         try:
             numeroAEliminar = int(input("\nQue numero de viaje desea eliminar?: "))  
             if 1 <= numeroAEliminar <= len(viajes):
                 eliminar = viajes.pop(numeroAEliminar - 1) 
-                print("\nSe eliminó el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
+                print("\nSe elimino el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
             else:
                 print("\nEl viaje ingresado no es valido.\n")
         except ValueError:
             print("\nDebe ingresar un número válido.\n")
->>>>>>> main
     input("\nEnter para volver al menú...")
 
 
@@ -197,15 +198,10 @@ def filtrarPorOrigen():
     titulo("FILTRAR VIAJES POR ORIGEN")
 
     if len(viajes) == 0:
-        print("\nNo hay ningún viaje cargado.\n")
+        print("\nNo hay ningun viaje cargado.\n")
     else:
-<<<<<<< HEAD
-        origen_buscado = input("\nIngrese el origen a buscar: ")  # pide el origen que quiera buscar
-        viajes_filtrados = list(filter(lambda viaje: viaje["origen"] == origen_buscado, viajes))  # filtra viajes
-=======
         origen_buscado = input("\nIngrese el origen a buscar: ")  
-        viajes_filtrados = list(filter(lambda viaje: viaje["origen"] == origen_buscado, viajes))  
->>>>>>> main
+        viajes_filtrados = list(filter(lambda viaje: viaje["origen"] == origen_buscado, viajes)) 
         if len(viajes_filtrados) == 0:
             print("\nNo hay viajes desde", origen_buscado,"\n")
         else:
@@ -216,7 +212,7 @@ def filtrarPorOrigen():
                 print("\nAsientos:", viaje["asientos"])
                 separacion()
 
-    input("\nEnter para volver al menú...")
+    input("\nEnter para volver al menu.")
 
 
 def cargarPasajerosEnViaje():
@@ -235,15 +231,6 @@ def cargarPasajerosEnViaje():
         for viaje in viajes:  
             print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"])
             i += 1
-<<<<<<< HEAD
-        num = int(input("Numero de viaje: "))
-        if 1 <= num <= len(viajes):
-            viaje = viajes[num - 1] 
-            print("Cargando pasajeros en el viaje desde", viaje["origen"], "hasta", viaje["destino"])
-            reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
-        else:
-            print("\nNumero no válido.\n")
-=======
         try:
             num = int(input("Numero de viaje: "))
             if 1 <= num <= len(viajes):
@@ -254,7 +241,6 @@ def cargarPasajerosEnViaje():
                 print("\nNumero no válido.\n")
         except ValueError:
             print("\nDebe ingresar un número válido.\n")
->>>>>>> main
     input("\nEnter para volver al menú...")
 
 
@@ -266,11 +252,7 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros):
     salir = False
     while salir == False:
         print("\nAsientos disponibles:\n")
-<<<<<<< HEAD
-        print(asientos_disponibles)  # muestra asientos libres y los ocupados con ("X")
-=======
         print(asientos_disponibles)  
->>>>>>> main
 
         elegir_asiento = input("\n¿Que asiento desea elegir? ('salir' para terminar): ").lower()
 
@@ -286,11 +268,7 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros):
             if asiento not in asientos_disponibles: 
                 print("\nEse asiento esta ocupado o no existe.\n")
             else:
-<<<<<<< HEAD
-                cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento)  # carga pasajero
-=======
                 cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento)  
->>>>>>> main
                 print("\nAsiento reservado correctamente.\n")
 
 
@@ -299,11 +277,11 @@ def cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento):
     Pide nombre y DNI, valida el formato del DNI, evita duplicados
     y marca el asiento elegido como ocupado.
     """
-    nombre = input("\nNombre del pasajero: ")  
+    nombre = input("\nNombre del pasajero: ")   
     dni = input("DNI del pasajero: ")       
 
     while not re.search("^[0-9]{7,8}$", dni):
-        print("\nDNI no valido. Ingrese solo numeros.")
+        print("\nDNI no valido. Ingrese solo 9 numeros.")
         dni = input("DNI del pasajero: ")
 
     for i in lista_pasajeros:
@@ -339,9 +317,4 @@ def mostrarPasajeros(viaje):
         print("   Pasajeros: No hay pasajeros cargados.")
 
 
-<<<<<<< HEAD
-menu()  # se llama al menú principal para iniciar el programa
-
-=======
 menu()
->>>>>>> main
