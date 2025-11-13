@@ -19,14 +19,16 @@ def guardarViajesArchivo():
         json.dump(viajes, f, indent=4)
 
 
-def cargarViajesArchivo():
-    """Carga los viajes desde el archivo .
-    Reconstruye los diccionarios con los datos almacenados previamente."""
+def guardarViajesArchivo():
+    """Guarda todos los viajes en un archivo JSON.
+    Usa manejo de errores para evitar que se pierdan datos si hay fallos al escribir.
+    """
     try:
-        with open("viajes.json", "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return [] 
+        with open("viajes.json", "w", encoding="utf-8") as f:
+            json.dump(viajes, f, indent=4, ensure_ascii=False)
+        print("\nDatos guardados correctamente en JSON.")
+    except Exception as e:
+        print(f"\nError al guardar los datos: {e}")
 
 def menu():
     """Función principal que muestra el menú del programa.
