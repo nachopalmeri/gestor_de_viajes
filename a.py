@@ -13,7 +13,7 @@ titulo = lambda txt: (separacion(), print(" " * ((64 - len(txt)) // 2) + txt), s
 
 def validar_opcion():
     """
-    Pide una opción valida del menu (1 al 6).
+    Pide una opcion valida del menu (1 al 6).
     Devuelve la opcion si es valida, o None si hay error.
     """
     try:
