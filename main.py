@@ -63,7 +63,7 @@ def menu():
         print("5) Cargar pasajeros en viaje existente.")
         print("6) Salir.\n")
         separacion()
-        opcion = validar_opcion
+        opcion = validar_opcion()
 
        
         if opcion == "1":
