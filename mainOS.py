@@ -239,33 +239,48 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros):
 
 def cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento):
     """Carga un nuevo pasajero en la lista.
-    Pide nombre y DNI, valida el formato del DNI, evita duplicados
-    y marca el asiento elegido como ocupado.
+    Pide nombre, DNI y email. Valida los datos con expresiones regulares
+    y previene DNIs duplicados dentro del mismo viaje.
     """
-    nombre = input("\nNombre del pasajero: ")  
-    dni = input("DNI del pasajero: ")       
+    """ Validar nombre """
+    nombre = input("\nNombre del pasajero: ")
+    while not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nombre):
+        print("\nNombre inválido. Solo se permiten letras y espacios.")
+        nombre = input("Nombre del pasajero: ")
 
-    while not re.search("^[0-9]{7,8}$", dni):
-        print("\nDNI no valido. Ingrese solo numeros.")
+    """ Validar DNI  """
+    dni = input("DNI del pasajero: ")
+    while not re.fullmatch(r"\d{7,8}", dni):
+        print("\nDNI inválido. Debe contener solo 7 u 8 números.")
         dni = input("DNI del pasajero: ")
 
-    for i in lista_pasajeros:
-        if i["dni"] == dni:
-            print("\nEse DNI ya esta registrado.\n")
+    """ Evitar duplicado de DNI en el mismo viaje """
+    for p in lista_pasajeros:
+        if p["dni"] == dni:
+            print("\nEse DNI ya está registrado en este viaje.")
             return
 
+    """ Validar email """
+    email = input("Email del pasajero: ")
+    while not re.fullmatch(r"[^@]+@[^@]+\.[^@]+", email):
+        print("\nEmail inválido. Intente nuevamente (ej: ejemplo@mail.com).")
+        email = input("Email del pasajero: ")
+
+    """ Crear pasajero """
     pasajero = {
         "nombre": nombre,
         "dni": dni,
+        "email": email,
         "asiento": asiento
     }
 
-    lista_pasajeros.append(pasajero)  
+    lista_pasajeros.append(pasajero)
     print("\nPasajero agregado correctamente.\n")
 
+    """ Marcar el asiento como ocupado """
     for i in range(len(asientos_disponibles)):
-        if asientos_disponibles[i] == asiento:  
-            asientos_disponibles[i] = "X"     
+        if asientos_disponibles[i] == asiento:
+            asientos_disponibles[i] = "X"
             print("\nAsiento reservado:", asiento)
 
 
