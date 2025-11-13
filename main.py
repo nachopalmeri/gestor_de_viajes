@@ -25,45 +25,9 @@ def validar_opcion():
     except Exception as e:
         print(f"Error inesperado: {e}")
         return None
-
-
-def validar_numero(mensaje):
-    """
-    Pide un numero entero y controla errores de tipo.
-    Devuelve el numero si es valido, o None si hay error.
-    """
-    try:
-        num = int(input(mensaje))
-        return num
-    except ValueError:
-        print("Error: Debe ingresar un numero entero.")
-        return None
-    except Exception as e:
-        print(f"Error inesperado: {e}")
-        return None
-
-
-def validar_asiento(asientos_disponibles):
-    """
-    Valida que el asiento exista y este disponible.
-    Devuelve el numero de asiento si es valido, o None si hay error.
-    """
-    try:
-        num = int(input("Ingrese el numero de asiento: "))
-        if num in asientos_disponibles:
-            return num
-        else:
-            print("Ese asiento no existe o ya esta ocupado.")
-            return None
-    except ValueError:
-        print("Error: Debe ingresar un numero valido.")
-        return None
-    except Exception as e:
-        print(f"Error inesperado: {e}")
-        return None
     
 
-    
+
 viajes = []  
 def guardarViajesArchivo():
     """Guarda todos los viajes en un archivo json.
@@ -99,7 +63,7 @@ def menu():
         print("5) Cargar pasajeros en viaje existente.")
         print("6) Salir.\n")
         separacion()
-        opcion = input("\nOpción: ")
+        opcion = validar_opcion
 
        
         if opcion == "1":
@@ -115,9 +79,7 @@ def menu():
         elif opcion == "6":
             guardarViajesArchivo()  
             print("\nSaliendo del programa...\n")
-        else:
-            print("\nError, opción inválida.\n")
-            input("Enter para continuar...")
+       
 
 
 def anotarNuevoViaje():
