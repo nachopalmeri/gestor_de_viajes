@@ -11,37 +11,56 @@ titulo = lambda txt: (separacion(), print(" " * ((64 - len(txt)) // 2) + txt), s
 
 
 def validar_opcion():
-    """Pide una opcion valida del menu (1 al 6)."""
-    while True:
-        opcion = input("Opcion: ")
+    """
+    Pide una opción valida del menu (1 al 6).
+    Devuelve la opcion si es valida, o None si hay error.
+    """
+    try:
+        opcion = input("Opción: ")
         if opcion in ["1", "2", "3", "4", "5", "6"]:
             return opcion
         else:
-            print("Error: debe ingresar un numero entre 1 y 6.")
+            print("Error: debe ingresar un número entre 1 y 6.")
+            return None
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+        return None
 
 
 def validar_numero(mensaje):
-    """Pide un numero entero y controla errores."""
-    while True:
-        try:
-            num = int(input(mensaje))
-            return num
-        except:
-            print("Debe ingresar un numero valido.")
+    """
+    Pide un numero entero y controla errores de tipo.
+    Devuelve el numero si es valido, o None si hay error.
+    """
+    try:
+        num = int(input(mensaje))
+        return num
+    except ValueError:
+        print("Error: Debe ingresar un numero entero.")
+        return None
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+        return None
 
 
 def validar_asiento(asientos_disponibles):
-    """Valida que el asiento exista y este disponible.
-    """""
-    while True:
-        try:
-            num = int(input("Ingrese el numero de asiento: "))
-            if num in asientos_disponibles:
-                return num
-            else:
-                print("Ese asiento no existe o ya esta ocupado.")
-        except:
-            print("Debe ingresar un número valido.")
+    """
+    Valida que el asiento exista y este disponible.
+    Devuelve el numero de asiento si es valido, o None si hay error.
+    """
+    try:
+        num = int(input("Ingrese el numero de asiento: "))
+        if num in asientos_disponibles:
+            return num
+        else:
+            print("Ese asiento no existe o ya esta ocupado.")
+            return None
+    except ValueError:
+        print("Error: Debe ingresar un numero valido.")
+        return None
+    except Exception as e:
+        print(f"Error inesperado: {e}")
+        return None
 
 
 viajes = []  
