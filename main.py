@@ -91,9 +91,26 @@ def anotarNuevoViaje():
     """
     clear()
     titulo("NUEVO VIAJE")
-    
-    origen = input("\nIngrese el origen: ")   
-    destino = input("Ingrese el destino: ") 
+    origenvalido = False
+    while not origenvalido:
+        origen = input("\nIngrese el origen:")
+        try:
+            if origen.strip() != "":
+                origenvalido = True
+            else:
+                print("El origen no puede estar vacio.")
+        except ValueError:
+            print("Error inesperado")
+    destinovalido = False
+    while not destinovalido:
+        destino =input("\nIngrese el destino:")
+        try:
+            if destino.strip() != "":
+                destinovalido = True
+            else:
+                print("El destino no puede estar vacio.")
+        except ValueError:
+            print("Error inesperado") 
 
     fechaValida = False
     while fechaValida == False:
@@ -121,7 +138,6 @@ def anotarNuevoViaje():
     print("\nViaje creado correctamente.\n")
     print("Ahora puede reservar asientos para este viaje:")
     reservar_asiento(viaje["asientos"], viaje["pasajeros"])  
-    input("\nPresione Enter para volver al menú...")
 
 
 def mostrarViajeExistente():
@@ -143,7 +159,6 @@ def mostrarViajeExistente():
             print("\nAsientos:", viaje["asientos"])  
             indice += 1
             separacion()
-    input("\nEnter para volver al menú...")
 
 
 def eliminarViaje():
@@ -167,7 +182,6 @@ def eliminarViaje():
                 print("\nEl viaje ingresado no es valido.\n")
         except ValueError:
             print("\nDebe ingresar un número válido.\n")
-    input("\nEnter para volver al menú...")
 
 
 def filtrarPorOrigen():
@@ -193,7 +207,6 @@ def filtrarPorOrigen():
                 print("\nAsientos:", viaje["asientos"])
                 separacion()
 
-    input("\nEnter para volver al menú...")
 
 
 def cargarPasajerosEnViaje():
@@ -222,7 +235,7 @@ def cargarPasajerosEnViaje():
                 print("\nNumero no válido.\n")
         except ValueError:
             print("\nDebe ingresar un número válido.\n")
-    input("\nEnter para volver al menú...")
+
 
 
 def reservar_asiento(asientos_disponibles, lista_pasajeros):
