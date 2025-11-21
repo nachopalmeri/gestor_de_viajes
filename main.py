@@ -4,7 +4,7 @@ from datetime import datetime #la usamos para que no se pueda sacar vuelos para 
 import json
 
 
-# Funciones visuales
+#Funciones visuales
 
 clear = lambda: os.system('cls' if os.name == 'nt' else 'clear')
 separacion = lambda ancho = 64, ch = '-': print(ch * ancho)
