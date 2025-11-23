@@ -23,13 +23,44 @@ def validar_opcion():
 
 viajes = []
 
+#FUNCIÓN RECURSIVA
+def mostrar_itinerario_recursivo(ruta, indice=0):
+    """
+    Muestra el itinerario (origen -> escalas -> destino) de forma recursiva.
+    """
+    if indice == len(ruta):
+        return
+
+    lugar = ruta[indice]
+    
+    if indice == 0:
+        prefijo = "Origen:"
+    elif indice == len(ruta) - 1:
+        prefijo = "Destino:"
+    else:
+        prefijo = f"Escala {indice}:"
+
+    print(f"  {prefijo} {lugar}")
+
+    # Llamada recursiva (paso inductivo)
+    mostrar_itinerario_recursivo(ruta, indice + 1)
+
+
 def guardarViajesArchivo():
     """Guarda todos los viajes en un archivo json. Convierte los diccionarios de viajes y pasajeros en texto legible y los guarda línea por línea.
       Se usa isinstance(datos, list) para confirmar que el contenido
         del JSON sea una lista"""
     try:
+        #convertir los sets a listas antes de guardar, sino da error
+        lista_para_guardar = []
+        for v in viajes:
+            temp_viaje = v.copy()
+            temp_viaje["dnis"] = list(v["dnis"]) 
+            temp_viaje["ocupados"] = list(v["ocupados"])
+            lista_para_guardar.append(temp_viaje)
+
         with open("viajes.json", "w") as f:
-            json.dump(viajes, f, indent=4)
+            json.dump(lista_para_guardar, f, indent=4)
     except Exception:
         print("Error al guardar los viajes en el archivo.")
 
@@ -42,8 +73,6 @@ def cargarViajesArchivo():
     try:
         with open("viajes.json", "r") as f:
             datos = json.load(f)
-
-            # Validación estructura JSON
             if not isinstance(datos, list):
                 print("Error: el archivo JSON no contiene una lista.")
                 return []
@@ -60,10 +89,13 @@ def cargarViajesArchivo():
                 ):
                     if "pasajeros" not in v or not isinstance(v["pasajeros"], list):
                         v["pasajeros"] = []
-                    if "dnis" not in v or not isinstance(v["dnis"], list):
-                        v["dnis"] = []
-                    if "ocupados" not in v or not isinstance(v["ocupados"], list):
-                        v["ocupados"] = []
+                    
+                    # Convertimos de nuevo a set para que funcione 
+                    v["dnis"] = set(v.get("dnis", []))
+                    v["ocupados"] = set(v.get("ocupados", []))
+                    if "escalas" not in v:
+                        v["escalas"] = []
+
                     viajes_validos.append(v)
                 else:
                     print("Se detectó un viaje inválido y fue descartado.")
@@ -100,7 +132,7 @@ def menu():
         opcion = None
         while opcion is None:
             opcion = validar_opcion()
-       
+        
         if opcion == "1":
             anotarNuevoViaje()
         elif opcion == "2":
@@ -130,6 +162,11 @@ def anotarNuevoViaje():
         except ValueError:
             print("Error inesperado")
 
+    escalas_str = input("\nIngrese las escalas (separadas por coma, o enter para ninguna): ")
+    if escalas_str.strip() == "":
+        escalas = []
+    else:
+        escalas = [e.strip() for e in escalas_str.split(",")]
     destinovalido = False
     while not destinovalido:
         destino = input("\nIngrese el destino:")
@@ -158,6 +195,7 @@ def anotarNuevoViaje():
 
     viaje = {
         "origen": origen,
+        "escalas": escalas, 
         "destino": destino,
         "fecha": fecha_ingresada,
         "asientos": asientos,
@@ -183,10 +221,17 @@ def mostrarViajeExistente():
         indice = 1
         for viaje in viajes:
             print(indice, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"])
+            
+            ruta_completa = [viaje["origen"]] + viaje["escalas"] + [viaje["destino"]]
+            print("\n  --- Itinerario del Viaje ---")
+            mostrar_itinerario_recursivo(ruta_completa, 0)
+            print("  ----------------------------\n")
             mostrarPasajeros(viaje)
             print("\nAsientos:", viaje["asientos"])
             indice += 1
             separacion()
+    
+    input("Presione Enter para continuar...") 
 
 def eliminarViaje():
     """Elimina un viaje de la lista. Muestra los viajes existentes, pide el número del viaje a eliminar y lo elimina si es válido. """
@@ -223,9 +268,14 @@ def filtrarPorOrigen():
             print("Viajes encontrados:")
             for viaje in viajes_filtrados:
                 print("\ndesde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"])
+                
+                ruta_completa = [viaje["origen"]] + viaje.get("escalas", []) + [viaje["destino"]]
+                mostrar_itinerario_recursivo(ruta_completa, 0)
+                
                 mostrarPasajeros(viaje)
                 print("\nAsientos:", viaje["asientos"])
                 separacion()
+    input("Presione Enter para continuar...")
 
 def cargarPasajerosEnViaje():
     """Carga pasajeros en un viaje ya existente. Muestra los viajes disponibles, pide el número del viaje y permite reservar asientos en el viaje seleccionado. """
