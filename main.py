@@ -8,6 +8,7 @@ separacion = lambda ancho = 64, ch = '-': print(ch * ancho)
 titulo = lambda txt: (separacion(), print(" " * ((64 - len(txt)) // 2) + txt), separacion())
 
 def validar_opcion():
+    """ Pide una opcion valida del menu (1 al 6). Devuelve la opcion si es valida, o None si hay error. """
     try:
         opcion = input("Opción: ")
         if opcion in ["1", "2", "3", "4", "5", "6"]:
@@ -23,17 +24,64 @@ def validar_opcion():
 viajes = []
 
 def guardarViajesArchivo():
-    with open("viajes.json", "w") as f:
-        json.dump(viajes, f, indent=4)
+    """Guarda todos los viajes en un archivo json. Convierte los diccionarios de viajes y pasajeros en texto legible y los guarda línea por línea.
+      Se usa isinstance(datos, list) para confirmar que el contenido
+        del JSON sea una lista"""
+    try:
+        with open("viajes.json", "w") as f:
+            json.dump(viajes, f, indent=4)
+    except Exception:
+        print("Error al guardar los viajes en el archivo.")
+
 
 def cargarViajesArchivo():
+    """Carga los viajes desde el archivo . Reconstruye los diccionarios con los datos almacenados previamente.
+      Se usa isinstance(datos, list) para confirmar que el contenido
+        del JSON sea una lista"""
+    
     try:
         with open("viajes.json", "r") as f:
-            return json.load(f)
+            datos = json.load(f)
+
+            # Validación estructura JSON
+            if not isinstance(datos, list):
+                print("Error: el archivo JSON no contiene una lista.")
+                return []
+
+            viajes_validos = []
+            for v in datos:
+                if (
+                    isinstance(v, dict)
+                    and "origen" in v
+                    and "destino" in v
+                    and "fecha" in v
+                    and "asientos" in v
+                    and isinstance(v["asientos"], list)
+                ):
+                    if "pasajeros" not in v or not isinstance(v["pasajeros"], list):
+                        v["pasajeros"] = []
+                    if "dnis" not in v or not isinstance(v["dnis"], list):
+                        v["dnis"] = []
+                    if "ocupados" not in v or not isinstance(v["ocupados"], list):
+                        v["ocupados"] = []
+                    viajes_validos.append(v)
+                else:
+                    print("Se detectó un viaje inválido y fue descartado.")
+
+            return viajes_validos
+
     except FileNotFoundError:
-        return [] 
+        return []
+    except json.JSONDecodeError:
+        print("Error: el archivo JSON está dañado.")
+        return []
+    except Exception:
+        print("Error inesperado al leer viajes.json.")
+        return []
+
 
 def menu():
+    """Función principal que muestra el menú del programa. Carga los viajes desde archivo al iniciar y los guarda al salir."""
     global viajes
     viajes = cargarViajesArchivo()
 
@@ -68,6 +116,7 @@ def menu():
             print("\nSaliendo del programa...\n")
 
 def anotarNuevoViaje():
+    """Inicia un nuevo viaje. Pide origen, destino y fecha. Crea la lista de asientos del 1 al 20. Guarda los datos en un diccionario y lo agrega a la lista general de viajes. Luego permite reservar asientos. """
     clear()
     titulo("NUEVO VIAJE")
     origenvalido = False
@@ -124,6 +173,7 @@ def anotarNuevoViaje():
     reservar_asiento(viaje["asientos"], viaje["pasajeros"], viaje)
 
 def mostrarViajeExistente():
+    """Muestra los viajes cargados. Si no hay viajes cargados informa al usuario. Si hay, muestra cada viaje con su número, origen, destino, fecha, pasajeros y asientos disponibles. """
     clear()
     titulo("TUS VIAJES")
 
@@ -139,6 +189,7 @@ def mostrarViajeExistente():
             separacion()
 
 def eliminarViaje():
+    """Elimina un viaje de la lista. Muestra los viajes existentes, pide el número del viaje a eliminar y lo elimina si es válido. """
     clear()
     titulo("ELIMINAR VIAJE")
 
@@ -157,6 +208,7 @@ def eliminarViaje():
             print("\nDebe ingresar un número válido.\n")
 
 def filtrarPorOrigen():
+    """Filtra viajes por origen. Pide el origen a buscar y muestra los viajes que coinciden. Si no hay coincidencias, informa al usuario. """
     clear()
     titulo("FILTRAR VIAJES POR ORIGEN")
 
@@ -176,6 +228,7 @@ def filtrarPorOrigen():
                 separacion()
 
 def cargarPasajerosEnViaje():
+    """Carga pasajeros en un viaje ya existente. Muestra los viajes disponibles, pide el número del viaje y permite reservar asientos en el viaje seleccionado. """
     clear()
     titulo("CARGAR PASAJEROS")
 
@@ -199,6 +252,7 @@ def cargarPasajerosEnViaje():
             print("\nDebe ingresar un número válido.\n")
 
 def reservar_asiento(asientos_disponibles, lista_pasajeros, viaje):
+    """Gestiona la reserva de asientos. Muestra los asientos disponibles, permite elegir uno y valida que el asiento sea correcto. También permite escribir 'salir' para terminar. """
     salir = False
     mientras = salir == False
     while salir == False:
@@ -223,6 +277,7 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros, viaje):
                 print("\nAsiento reservado correctamente.\n")
 
 def cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento, viaje):
+    """Carga un nuevo pasajero en la lista. Pide nombre, DNI y email. Valida los datos con expresiones regulares y previene DNIs duplicados dentro del mismo viaje. """
     nombre = input("\nNombre del pasajero: ")
     while not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nombre):
         print("\nNombre inválido. Solo se permiten letras y espacios.")
@@ -260,6 +315,7 @@ def cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento, viaje):
             print("\nAsiento reservado:", asiento)
 
 def mostrarPasajeros(viaje):
+    """Muestra la lista de pasajeros de un viaje. Si hay pasajeros, los lista con nombre, DNI y asiento. Si no hay, informa que no existen pasajeros cargados. """
     if viaje["pasajeros"]:
         print("   Pasajeros:")
 
