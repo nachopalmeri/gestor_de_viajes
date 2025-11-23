@@ -200,6 +200,7 @@ def cargarPasajerosEnViaje():
 
 def reservar_asiento(asientos_disponibles, lista_pasajeros, viaje):
     salir = False
+    mientras = salir == False
     while salir == False:
         print("\nAsientos disponibles:\n")
         print(asientos_disponibles)
@@ -261,8 +262,16 @@ def cargar_pasajero(lista_pasajeros, asientos_disponibles, asiento, viaje):
 def mostrarPasajeros(viaje):
     if viaje["pasajeros"]:
         print("   Pasajeros:")
-        for pasajero in viaje["pasajeros"]:
-            print("    -", pasajero["nombre"], "-", pasajero["dni"], "- asiento", pasajero["asiento"])
+
+        # recursividad
+        def mostrar_rec(i):
+            if i == len(viaje["pasajeros"]):
+                return
+            p = viaje["pasajeros"][i]
+            print("    -", p["nombre"], "-", p["dni"], "- asiento", p["asiento"])
+            mostrar_rec(i + 1)
+
+        mostrar_rec(0)
     else:
         print("   Pasajeros: No hay pasajeros cargados.")
 
