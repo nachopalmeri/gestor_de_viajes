@@ -1,1 +1,121 @@
-[]
+[
+    {
+        "origen": "Espa\u00f1a",
+        "destino": "Argentina",
+        "fecha": "10/12/2025",
+        "asientos": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+        ],
+        "pasajeros": []
+    },
+    {
+        "origen": "argentina",
+        "destino": "espania",
+        "fecha": "10/10/2026",
+        "asientos": [
+            "X",
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+        ],
+        "pasajeros": [
+            {
+                "nombre": "luca",
+                "dni": "47575518",
+                "email": "luca@gmail.com",
+                "asiento": 1
+            }
+        ]
+    },
+    {
+        "origen": "espania",
+        "destino": "argentina",
+        "fecha": "10/10/2026",
+        "asientos": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+        ],
+        "pasajeros": []
+    },
+    {
+        "origen": "argentina",
+        "destino": "francia",
+        "fecha": "10/10/2026",
+        "asientos": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+        ],
+        "pasajeros": []
+    }
+]
