@@ -49,10 +49,39 @@ def mostrar_itinerario_recursivo(ruta, indice=0):
 
 viajes = []  
 def guardarViajesArchivo():
-    """Guarda todos los viajes en un archivo json.
-    Convierte los diccionarios de viajes y pasajeros en texto legible y los guarda línea por línea."""
-    with open("viajes.json", "w") as f:
-        json.dump(viajes, f, indent=4)
+    """Guarda todos los viajes en un archivo json. Convierte los diccionarios de viajes y pasajeros en texto legible y los guarda línea por línea.
+      Se usa isinstance(datos, list) para confirmar que el contenido
+        del JSON sea una lista"""
+    try:
+        #convertir los sets a listas antes de guardar, sino da error
+        lista_para_guardar = []
+        for v in viajes:
+            temp_viaje = v.copy()
+            temp_viaje["dnis"] = list(v["dnis"]) 
+            temp_viaje["ocupados"] = list(v["ocupados"])
+            lista_para_guardar.append(temp_viaje)
+
+        with open("viajes.json", "w") as f:
+            json.dump(lista_para_guardar, f, indent=4)
+    except Exception:
+        print("Error al guardar los viajes en el archivo.")
+def guardarViajesArchivo():
+    """Guarda todos los viajes en un archivo json. Convierte los diccionarios de viajes y pasajeros en texto legible y los guarda línea por línea.
+      Se usa isinstance(datos, list) para confirmar que el contenido
+        del JSON sea una lista"""
+    try:
+        #convertir los sets a listas antes de guardar, sino da error
+        lista_para_guardar = []
+        for v in viajes:
+            temp_viaje = v.copy()
+            temp_viaje["dnis"] = list(v["dnis"]) 
+            temp_viaje["ocupados"] = list(v["ocupados"])
+            lista_para_guardar.append(temp_viaje)
+
+        with open("viajes.json", "w") as f:
+            json.dump(lista_para_guardar, f, indent=4)
+    except Exception:
+        print("Error al guardar los viajes en el archivo.")
 
 
 def cargarViajesArchivo():
