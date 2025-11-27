@@ -91,27 +91,30 @@ def anotarNuevoViaje():
     """
     clear()
     titulo("NUEVO VIAJE")
+    
     origenvalido = False
     while not origenvalido:
         origen = input("\nIngrese el origen:")
-        try:
-            if origen.strip() != "":
-                origenvalido = True
-            else:
-                print("El origen no puede estar vacio.")
-        except ValueError:
-            print("Error inesperado")
-
+        
+        if origen.strip() == "":
+            print("El origen no puede estar vacío.")
+        elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+",origen):
+            print("El origen solo debe contener letras y espacios.")
+        else:
+            origenvalido = True
+            
     destinovalido = False
+
     while not destinovalido:
+
         destino = input("\nIngrese el destino:")
-        try:
-            if destino.strip() != "":
-                destinovalido = True
-            else:
-                print("El destino no puede estar vacio.")
-        except ValueError:
-            print("Error inesperado")
+
+        if destino.strip() == "":
+            print("El destino no puede estar vacío.")
+        elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+",destino):
+            print("El destino solo debe contener letras y espacios.")
+        else:
+            destinovalido = True
 
     fechaValida = False
     while fechaValida == False:
