@@ -317,6 +317,7 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros):
     que el asiento sea correcto. También permite escribir 'salir' para terminar.
     """
     salir = False
+    mientras = salir == False
     while salir == False:
         print("\nAsientos disponibles:\n")
         
@@ -432,11 +433,15 @@ def mostrarPasajeros(viaje):
     Si no hay, informa que no existen pasajeros cargados.
     """
     if viaje["pasajeros"]:
-        print("   Pasajeros:")
-        for pasajero in viaje["pasajeros"]:
-            print("    -", pasajero["nombre"], "-", pasajero["dni"], "- asiento", pasajero["asiento"])
+        print("Pasajeros:")
+        def mostrar_rec(i):
+            if i == len(viaje["pasajeros"]):
+                return
+        p = viaje["pasajeros"][i]
+        print("    -", p["nombre"], "-", p["dni"], "- asiento", p["asiento"])
+        mostrar_rec(0)
     else:
-        print("   Pasajeros: No hay pasajeros cargados.")
+        print("Pasajeros: No hay pasajeros cargados.")
 
 
 def mostrar_asientos(matriz_asientos, pasajeros):
