@@ -11,8 +11,8 @@ titulo = lambda txt: (separacion(), print(" " * ((64 - len(txt)) // 2) + txt), s
 
 def validar_opcion():
     """
-    Pide una opcion valida del menu (1 al 8).
-    Devuelve la opcion si es valida, o None si hay error.
+    Pide una opcion válida del menu (1 al 8).
+    Devuelve la opcion si es válida, o None si hay error.
     """
     try:
         opcion = input("Opción: ")
@@ -148,7 +148,7 @@ def anotarNuevoViaje():
 
     fechaValida = False
     while fechaValida == False:
-        fecha_ingresada = input("Ingrese la fecha (dd/mm/aaaa): ")
+        fecha_ingresada = input("\nIngrese la fecha (dd/mm/aaaa): ")
         try:
             fechaConvertida = datetime.strptime(fecha_ingresada, "%d/%m/%Y").date()
             hoy = datetime.now().date()
@@ -171,6 +171,7 @@ def anotarNuevoViaje():
             respuesta_valida = True
         else:
             print("Opción inválida. Por favor ingrese 's' o 'n'.")
+
     while cargar_escalas:
         nombre_valido = False
         while not nombre_valido:
@@ -184,6 +185,7 @@ def anotarNuevoViaje():
                 escalas.append(nueva_escala)
                 print(f"Escala '{nueva_escala}' agregada.")
                 nombre_valido = True  
+
         decision_valida = False
         while not decision_valida:
             otra = input("¿Desea agregar otra escala? (s/n): ").lower().strip()
@@ -197,7 +199,6 @@ def anotarNuevoViaje():
             else:
                 print("Opción inválida. Por favor ingrese 's' o 'n'.")
         
-        agregar = input("¿Desea agregar otra escala? (s/n): ").lower()
     asientos = [str(i) for i in range(1, 21)]
     
     viaje = {
@@ -257,7 +258,7 @@ def eliminarViaje():
                 eliminar = viajes.pop(numeroAEliminar - 1) 
                 print("\nSe eliminó el viaje que iba desde", eliminar["origen"], "hasta", eliminar["destino"], "la fecha", eliminar["fecha"])
             else:
-                print("\nEl viaje ingresado no es valido.\n")
+                print("\nEl viaje ingresado no es válido.\n")
         except ValueError:
             print("\nDebe ingresar un número válido.\n")
 
@@ -294,7 +295,7 @@ def cargarPasajerosEnViaje():
         input("\nPresione Enter para volver al menú...")
 
     else:
-        print("\nSeleccione el número de viaje para cargar pasajeros:")
+        print("\nSeleccione el número de viaje para cargar pasajeros: ")
         i = 0
         for viaje in viajes:  
             print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"])
@@ -338,7 +339,7 @@ def reservar_asiento(viaje):
             salir = True
         else:
             if not elegir_asiento.isdigit(): 
-                print("\nIngrese un numero de asiento valido.")
+                print("\nIngrese un número de asiento válido.")
                 continue
 
             if elegir_asiento not in asientos_disponibles:
@@ -440,7 +441,7 @@ def mostrarPasajeros(viaje):
 
 def mostrar_asientos(matriz_asientos, pasajeros):
     """Muestra la matriz de asientos en formato [XX] [01]."""
-    print("\n----- ASIENTOS -----")
+    titulo("ASIENTOS")
     ocupados = []
     if isinstance(pasajeros, list):
         for p in pasajeros:
@@ -509,7 +510,7 @@ def editar_pasajero(viaje):
     
     if not viaje["pasajeros"]:
         print("\nNo hay pasajeros para editar en este viaje.\n")
-        input("\nPresione ENTER para continuar...")
+        input("\nPresione Enter para continuar...")
         return
         
 
@@ -624,7 +625,7 @@ def editarViaje():
 
     if len(viajes) == 0:
         print("\nNo hay viajes cargados actualmente para editar.\n")
-        input("\nPresione ENTER para continuar...")
+        input("\nPresione Enter para continuar...")
         return
     
     while True:
