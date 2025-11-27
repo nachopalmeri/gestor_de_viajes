@@ -12,15 +12,15 @@ titulo = lambda txt: (separacion(), print(" " * ((64 - len(txt)) // 2) + txt), s
 
 def validar_opcion():
     """
-    Pide una opcion valida del menu (1 al 7).
+    Pide una opcion valida del menu (1 al 8).
     Devuelve la opcion si es valida, o None si hay error.
     """
     try:
         opcion = input("Opción: ")
-        if opcion in ["1", "2", "3", "4", "5", "6","7"]:
+        if opcion in ["1", "2", "3", "4", "5", "6","7","8"]:
             return opcion
         else:
-            print("Error: debe ingresar un número entre 1 y 7.")
+            print("Error: debe ingresar un número entre 1 y 8.")
             return None
     except Exception as e:
         print(f"Error inesperado: {e}")
@@ -52,7 +52,7 @@ def menu():
     viajes = cargarViajesArchivo()  
 
     opcion = ""
-    while opcion != "7":
+    while opcion != "8":
         clear()
         titulo("GESTOR DE VIAJES")
 
@@ -62,7 +62,8 @@ def menu():
         print("4) Filtrar viaje por origen.")
         print("5) Cargar pasajeros en viaje existente.")
         print("6) Editar pasajeros de un viaje existente.")
-        print("7) Salir.\n")
+        print("7) Editar un viaje existente.")
+        print("8) Salir.\n")
         separacion()
         opcion = None
         while opcion is None:
@@ -81,6 +82,8 @@ def menu():
         elif opcion == "6":
             editarPasajeroEnViaje()
         elif opcion == "7":
+            editarViaje()
+        elif opcion == "8":
             guardarViajesArchivo()  
             print("\nSaliendo del programa...\n")
        
@@ -551,6 +554,95 @@ def editar_pasajero(viaje):
         print("Opcion no valida.")
         return
 
+
+
+
+def editarViaje():
+    """Permite seleccionar un viaje y editar su Origen, Destino o Fecha."""
+    clear()
+    titulo("EDITAR VIAJE")
+
+    if len(viajes) == 0:
+        print("\nNo hay viajes cargados actualmente para editar.\n")
+        input("\nPresione ENTER para continuar...")
+        return
+    
+    print("\nSeleccione el número de viaje para editar:")
+    for i, viaje in enumerate(viajes):
+        print(f"{i + 1}) Desde: {viaje['origen']} | Hasta: {viaje['destino']} | Fecha: {viaje['fecha']}")
+
+    try:
+        num = int(input("Número de viaje a editar: "))
+        if 1 <= num <= len(viajes):
+            viaje = viajes[num - 1]
+            
+            clear()
+            titulo("EDITAR VIAJE SELECCIONADO")
+            print(f"Viaje actual: {viaje['origen']} -> {viaje['destino']} ({viaje['fecha']})\n")
+            
+            print("1. Editar Origen")
+            print("2. Editar Destino")
+            print("3. Editar Fecha")
+            print("4. Volver (cancelar)")
+            
+            opcion = input("Seleccione opción: ").strip()
+            
+            if opcion == "1":
+                origenvalido = False
+                while not origenvalido:
+                    nuevo_origen = input("\nIngrese el nuevo origen: ")
+                    if nuevo_origen.strip() == "":
+                        print("El origen no puede estar vacío.")
+                    elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_origen):
+                        print("El origen solo debe contener letras y espacios.")
+                    else:
+                        viaje["origen"] = nuevo_origen
+                        print("Origen actualizado correctamente.")
+                        origenvalido = True
+                        
+            elif opcion == "2":
+                # La lógica de validación de destino se toma de anotarNuevoViaje
+                destinovalido = False
+                while not destinovalido:
+                    nuevo_destino = input("\nIngrese el nuevo destino: ")
+                    if nuevo_destino.strip() == "":
+                        print("El destino no puede estar vacio.")
+                    elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_destino):
+                        print("El destino solo debe contener letras y espacios.")
+                    else:
+                        viaje["destino"] = nuevo_destino
+                        print("Destino actualizado correctamente.")
+                        destinovalido = True
+                        
+            elif opcion == "3":
+                fechaValida = False
+                while fechaValida == False:
+                    nueva_fecha = input("Ingrese la nueva fecha (dd/mm/aaaa): ")
+                    try:
+                        fechaConvertida = datetime.strptime(nueva_fecha, "%d/%m/%Y").date()
+                        hoy = datetime.now().date()
+                        if fechaConvertida < hoy:
+                            print("\nLa fecha ingresada ya paso. Ingrese una fecha futura.\n")
+                        else:
+                            viaje["fecha"] = nueva_fecha
+                            print("Fecha actualizada correctamente.")
+                            fechaValida = True
+                    except ValueError:
+                        print("\nFormato no valido. Use el formato dd/mm/aaaa.\n")
+                        
+            elif opcion == "4":
+                print("\nEdicion de viaje cancelada.")
+            
+            else:
+                print("Opcion no valida.")
+
+        else:
+            print("Número de viaje no valido.")
+            
+    except ValueError:
+        print("Debe ingresar un numero valido.")
+        
+    input("\nPresione ENTER para continuar...")
 
 
 if __name__ == "__main__": #“Solo ejecutar menu() si este archivo se ejecuta directamente, no si se importa”.
