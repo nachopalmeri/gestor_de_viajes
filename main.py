@@ -253,9 +253,9 @@ def reservar_asiento(asientos_disponibles, lista_pasajeros):
         
         for i in range (0, len(asientos_disponibles), 2):
             if i + 1 < len(asientos_disponibles):
-                print(f"{asientos_disponibles[i]:<3} {asientos_disponibles[i+1]:<3}")
+                print(f"|  {asientos_disponibles[i]:<3} {asientos_disponibles[i+1]:<3} |")
             else:
-                print(f"{asientos_disponibles[i]}")
+                print(f"|  {asientos_disponibles[i]:<3} |")
         elegir_asiento = input("\n¿Que asiento desea elegir? ('salir' para terminar): ").lower()
 
         if elegir_asiento == "salir": 
