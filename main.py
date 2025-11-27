@@ -161,16 +161,43 @@ def anotarNuevoViaje():
         except ValueError:
             print("\nFormato inválido. Use el formato dd/mm/aaaa.\n")
     escalas = []
-    agregar = input("\n¿Desea agregar escalas? (s/n): ").lower()
-    while agregar == "s":
-        nueva_escala = input("Ingrese la ciudad de escala: ").capitalize()
-        if nueva_escala.strip() == "":
-             print("La escala no puede estar vacía.")
-        elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nueva_escala):
-             print("La escala solo debe contener letras y espacios.")
+    respuesta_valida = False
+    cargar_escalas = False  
+    while not respuesta_valida:
+        agregar = input("\n¿Desea agregar escalas? (s/n): ").lower().strip()
+        if agregar == "s":
+            cargar_escalas = True
+            respuesta_valida = True
+        elif agregar == "n":
+            cargar_escalas = False
+            respuesta_valida = True
         else:
-             escalas.append(nueva_escala)
-             print("Escala agregada.")
+            print("Opción inválida. Por favor ingrese 's' o 'n'.")
+    while cargar_escalas:
+        nombre_valido = False
+        while not nombre_valido:
+            nueva_escala = input("Ingrese la ciudad de escala: ").capitalize().strip()
+            
+            if nueva_escala == "":
+                print("La escala no puede estar vacía.")
+            elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nueva_escala):
+                print("La escala solo debe contener letras y espacios.")
+            else:
+                escalas.append(nueva_escala)
+                print(f"Escala '{nueva_escala}' agregada.")
+                nombre_valido = True  
+        decision_valida = False
+        while not decision_valida:
+            otra = input("¿Desea agregar otra escala? (s/n): ").lower().strip()
+            
+            if otra == "s":
+                cargar_escalas = True 
+                decision_valida = True 
+            elif otra == "n":
+                cargar_escalas = False 
+                decision_valida = True 
+            else:
+                print("Opción inválida. Por favor ingrese 's' o 'n'.")
         
         agregar = input("¿Desea agregar otra escala? (s/n): ").lower()
     asientos = [str(i) for i in range(1, 21)]
