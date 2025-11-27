@@ -26,7 +26,26 @@ def validar_opcion():
         print(f"Error inesperado: {e}")
         return None
     
+def mostrar_itinerario_recursivo(ruta, indice=0):
+    """
+    Muestra el itinerario (origen -> escalas -> destino) de forma recursiva.
+    """
+    if indice == len(ruta):
+        return
 
+    lugar = ruta[indice]
+    
+    if indice == 0:
+        prefijo = "Origen:"
+    elif indice == len(ruta) - 1:
+        prefijo = "Destino:"
+    else:
+        prefijo = f"Escala {indice}:"
+
+    print(f"  {prefijo} {lugar}")
+
+    # Llamada recursiva (paso inductivo)
+    mostrar_itinerario_recursivo(ruta, indice + 1)
 
 viajes = []  
 def guardarViajesArchivo():
