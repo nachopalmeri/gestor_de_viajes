@@ -51,7 +51,6 @@ def guardarViajesArchivo():
         lista_para_guardar = []
         for viaje in viajes:
             temp_viaje = viaje.copy()
-            # Convertimos sets a listas para JSON
             temp_viaje["dnis"] = list(viaje["dnis"]) 
             temp_viaje["ocupados"] = list(viaje["ocupados"])
             lista_para_guardar.append(temp_viaje)
@@ -71,7 +70,6 @@ def cargarViajesArchivo():
             for viaje in datos:
                 viaje["dnis"] = set(viaje["dnis"])
                 viaje["ocupados"] = set(viaje["ocupados"])
-                # fijasrse de que tenga la clave escalas por si es un archivo viejo
                 if "escalas" not in viaje:
                     viaje["escalas"] = []
             return datos
@@ -332,7 +330,6 @@ def reservar_asiento(viaje):
     
     salir = False
     while not salir:
-        # Visualización tipo Avión
         matriz_visual = [asientos_disponibles[i:i+4] for i in range(0, 20, 4)]
         mostrar_asientos(matriz_visual, viaje["pasajeros"])
         
@@ -345,7 +342,6 @@ def reservar_asiento(viaje):
                 print("\nIngrese un número de asiento válido.")
                 continue
 
-            # Validar si existe en la lista de asientos (usamos el string)
             if elegir_asiento not in asientos_disponibles:
                  print("\nEse asiento no existe o ya fue borrado de la lista.")
             elif elegir_asiento in viaje["ocupados"]: 
@@ -415,7 +411,6 @@ def cargar_pasajero(viaje, asientos_disponibles, asiento):
         "asiento": asiento
     }
 
-    # Guardar en Lista y en Sets
     lista_pasajeros.append(pasajero)
     viaje["dnis"].add(dni)
     viaje["ocupados"].add(asiento)
@@ -423,7 +418,6 @@ def cargar_pasajero(viaje, asientos_disponibles, asiento):
     print("\nPasajero agregado correctamente.\n")
 
     """ Marcar el asiento como ocupado (Visualmente en la lista) """
-    #asiento llega como string por eso lo pasa a entero y restás 1 la lista arranca en 0.
     idx = int(asiento) - 1
     if 0 <= idx < len(asientos_disponibles):
         asientos_disponibles[idx] = "X"
@@ -480,115 +474,149 @@ def editarPasajeroEnViaje():
 
     if len(viajes) == 0:
         print("\nNo hay viajes cargados actualmente.\n")
+        input("\nPresione ENTER para continuar...")
         return
     
-    print("\nSeleccione el número de viaje donde desea editar un pasajero: ")
-    for i, viaje in enumerate(viajes):
-        print(i + 1, "desde", viaje["origen"], "hasta", viaje["destino"], "fecha", viaje["fecha"])
-    try:
-        num = int(input("Número de viaje: "))
-        if 1 <= num <= len(viajes):
-            viaje = viajes[num - 1]
-            editar_pasajero(viaje)   
-        else:
-            print("Número no válido")
-    except ValueError:
-        print("Debe ingresar un número válido.")
+
+    while True:
+        print("\nSeleccione el número de viaje donde desea editar un pasajero:")
+        for i, viaje in enumerate(viajes):
+            print(f"{i + 1}) Desde: {viaje['origen']} | Hasta: {viaje['destino']} | Fecha: {viaje['fecha']}")
+        
+        print(f"\nIngrese '0' para volver (cancelar).") 
+
+        opcion_ingresada = input("Número de viaje: ").strip()
+
+        if opcion_ingresada == "0":
+            print("\nEdición de pasajero cancelada.")
+            input("\nPresione ENTER para continuar...")
+            return 
+            
+        try:
+            num = int(opcion_ingresada)
+            if 1 <= num <= len(viajes):
+                viaje = viajes[num - 1]
+                editar_pasajero(viaje) 
+                break 
+            else:
+                print("Número no valido. Por favor, intente de nuevo.")
+                input("\nPresione ENTER para continuar...")
+        except ValueError:
+            print("Debe ingresar un numero válido.")
+            input("\nPresione ENTER para continuar...")
 
 
 def editar_pasajero(viaje):
+    
     if not viaje["pasajeros"]:
         print("\nNo hay pasajeros para editar en este viaje.\n")
         input("\nPresione Enter para continuar...")
         return
-    print("\nPasajeros en este viaje:")
-    for persona in viaje["pasajeros"]:
-        print(f" - {persona['nombre']} | DNI: {persona['dni']} | Email: {persona['email']} | Asiento: {persona['asiento']}")
+        
 
-    dni = input("\nIngrese el DNI del pasajero a editar: ").strip()
-    indice = None
-    for i, p in enumerate(viaje["pasajeros"]):
-        if p["dni"] == dni and indice is None:
-            indice = i
+    while True:
+        print("\nPasajeros en este viaje:")
+        for persona in viaje["pasajeros"]:
+            print(f" - {persona['nombre']} | DNI: {persona['dni']} | Email: {persona['email']} | Asiento: {persona['asiento']}")
 
+        dni = input("\nIngrese el DNI del pasajero a editar (o '0' para volver): ").strip()
 
+        if dni == "0":
+            print("Seleccion de pasajero cancelada.")
+            input("\nPresione ENTER para continuar...")
+            return
 
-    if indice is None:
-        print("\nNo existe un pasajero con ese DNI en este viaje.\n")
-        input("\nPresione Enter para continuar...")
-        return
+        indice = None
+        for i, p in enumerate(viaje["pasajeros"]):
+            if p["dni"] == dni:
+                indice = i
+                break 
+        
+        if indice is None:
+            print("\nNo existe un pasajero con ese DNI en este viaje. Intente de nuevo.")
+            input("\nPresione ENTER para continuar...")
+            continue 
 
-    pasajero = viaje["pasajeros"][indice]
-    print("\n--- Editando pasajero ---")
-    print(f"Actual: Nombre: {pasajero['nombre']} | Email: {pasajero['email']} | Asiento: {pasajero['asiento']}")
-    print("1) Editar nombre completo")
-    print("2) Editar email")
-    print("3) Cambiar asiento")
-    print("4) Eliminar pasajero")
-    print("5) Volver (cancelar)")
+        pasajero = viaje["pasajeros"][indice]
+        
+        while True:
+            clear()
+            titulo("EDITAR PASAJERO SELECCIONADO")
+            print(f"Pasajero: {pasajero['nombre']} | DNI: {pasajero['dni']}\n")
+            print(f"Actual: Nombre: {pasajero['nombre']} | Email: {pasajero['email']} | Asiento: {pasajero['asiento']}")
+            print("1. Editar nombre completo")
+            print("2. Editar email")
+            print("3. Cambiar asiento")
+            print("4. Eliminar pasajero")
+            print("5. Volver (seleccionar otro pasajero o salir)")
 
-    opcion = input("Seleccione opción: ").strip()
+            opcion = input("Seleccione opción: ").strip()
 
-    if opcion == "1":
-        nuevo_nombre = input("Nuevo nombre y apellido: ").strip()
-        while not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_nombre) or nuevo_nombre == "":
-            print("Nombre inválido. Solo letras y espacios.")
-            nuevo_nombre = input("Nuevo nombre y apellido: ").strip()
-        pasajero["nombre"] = nuevo_nombre
-        print("Nombre actualizado correctamente.")
-        input("\nPresione Enter para continuar...")
+            if opcion == "1":
+                nuevo_nombre = input("Nuevo nombre y apellido: ").strip()
+                while not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_nombre) or nuevo_nombre == "":
+                    print("Nombre np valido. Solo letras y espacios.")
+                    nuevo_nombre = input("Nuevo nombre y apellido: ").strip()
+                pasajero["nombre"] = nuevo_nombre
+                print("Nombre actualizado correctamente.")
+                input("\nPresione ENTER para continuar...")
 
-
-    elif opcion == "2":
-        nuevo_email = input("Nuevo email: ").strip()
-        while not re.fullmatch(r"[^@]+@[^@]+\.[^@]+", nuevo_email):
-            print("Email no válido. Ejemplo: ejemplo@mail.com")
-            nuevo_email = input("Nuevo email: ").strip()
-        pasajero["email"] = nuevo_email
-        print("Email actualizado correctamente.")
-        input("\nPresione Enter para continuar...")
-
-
-    elif opcion == "3":
-        nuevo_asiento = elegir_asiento_para_edicion(viaje["asientos"], viaje["pasajeros"])
-        if nuevo_asiento is None:
-            return  
-        asiento_viejo_str = str(pasajero["asiento"])
-        nuevo_asiento_str = str(nuevo_asiento)
-        if asiento_viejo_str in viaje["ocupados"]:
-            viaje["ocupados"].remove(asiento_viejo_str)
-        if 1 <= int(pasajero["asiento"]) <= 20:
-             viaje["asientos"][int(pasajero["asiento"])-1] = str(pasajero["asiento"])
-        viaje["ocupados"].add(nuevo_asiento_str)
-        viaje["asientos"][nuevo_asiento-1] = "X"
-
-        pasajero["asiento"] = nuevo_asiento_str
-        print(f"Asiento cambiado correctamente a {nuevo_asiento}.")
-        input("\nPresione Enter para continuar...")
-
-    elif opcion == "4":
-        confirm = input(f"¿Confirma eliminar a {pasajero['nombre']} (DNI {pasajero['dni']})? (s/n): ").strip().lower()
-        if confirm == "s":
-            asiento_str = str(pasajero["asiento"])
-            if asiento_str in viaje["ocupados"]:
-                viaje["ocupados"].remove(asiento_str)
-            if pasajero["dni"] in viaje["dnis"]:
-                viaje["dnis"].remove(pasajero["dni"])
-            if 1 <= int(pasajero["asiento"]) <= 20:
-                viaje["asientos"][int(pasajero["asiento"])-1] = str(pasajero["asiento"])
-            viaje["pasajeros"].pop(indice)
-            print("Pasajero eliminado correctamente.")
-            input("\nPresione Enter para continuar...")
-        else:
-            print("Eliminación cancelada.")
-            input("\nPresione Enter para continuar...")
-    elif opcion == "5":
-        return
+            elif opcion == "2":
+                nuevo_email = input("Nuevo email: ").strip()
+                while not re.fullmatch(r"[^@]+@[^@]+\.[^@]+", nuevo_email):
+                    print("Email no valido. Ejemplo: ejemplo@mail.com")
+                    nuevo_email = input("Nuevo email: ").strip()
+                pasajero["email"] = nuevo_email
+                print("Email actualizado correctamente.")
+                input("\nPresione ENTER para continuar...")
 
 
-    else:
-        print("Opción no válida.")
-        return
+            elif opcion == "3":
+                nuevo_asiento = elegir_asiento_para_edicion(viaje["asientos"], viaje["pasajeros"])
+                if nuevo_asiento is not None: 
+                    asiento_viejo_str = str(pasajero["asiento"])
+                    nuevo_asiento_str = str(nuevo_asiento)
+                    
+                    if asiento_viejo_str in viaje["ocupados"]:
+                        viaje["ocupados"].remove(asiento_viejo_str)
+                    
+                    if 1 <= int(pasajero["asiento"]) <= 20:
+                        viaje["asientos"][int(pasajero["asiento"])-1] = str(pasajero["asiento"])
+                        
+                    viaje["ocupados"].add(nuevo_asiento_str)
+                    viaje["asientos"][nuevo_asiento-1] = "X"
+                    pasajero["asiento"] = nuevo_asiento_str
+                    print(f"Asiento cambiado correctamente a {nuevo_asiento_str}.")
+                
+                input("\nPresione ENTER para continuar...")
+
+            elif opcion == "4":
+                confirm = input(f"¿Confirma eliminar a {pasajero['nombre']} (DNI {pasajero['dni']})? (s/n): ").strip().lower()
+                if confirm == "s":
+                    asiento_str = str(pasajero["asiento"])
+                    if asiento_str in viaje["ocupados"]:
+                        viaje["ocupados"].remove(asiento_str)
+                    if pasajero["dni"] in viaje["dnis"]:
+                        viaje["dnis"].remove(pasajero["dni"])
+                    if 1 <= int(pasajero["asiento"]) <= 20:
+                        viaje["asientos"][int(pasajero["asiento"])-1] = str(pasajero["asiento"])
+                    viaje["pasajeros"].pop(indice)
+                    print("Pasajero eliminado correctamente.")
+                    input("\nPresione ENTER para continuar...")
+                    return 
+                else:
+                    print("Eliminación cancelada.")
+                    input("\nPresione ENTER para continuar...")
+            
+            elif opcion == "5":
+                break 
+
+            else:
+                print("Opcion no valida.")
+                input("\nPresione ENTER para continuar...")
+        
+
+
 
 def editarViaje():
     """Permite seleccionar un viaje y editar su Origen, Destino o Fecha."""
@@ -600,81 +628,97 @@ def editarViaje():
         input("\nPresione Enter para continuar...")
         return
     
-    print("\nSeleccione el número de viaje para editar:")
-    for i, viaje in enumerate(viajes):
-        print(f"{i + 1}) Desde: {viaje['origen']} | Hasta: {viaje['destino']} | Fecha: {viaje['fecha']}")
+    while True:
+        print("\nSeleccione el numero de viaje para editar:")
+        for i, viaje in enumerate(viajes):
+            print(f"{i + 1}) Desde: {viaje['origen']} | Hasta: {viaje['destino']} | Fecha: {viaje['fecha']}")
 
-    try:
-        num = int(input("Número de viaje a editar: "))
-        if 1 <= num <= len(viajes):
-            viaje = viajes[num - 1]
-            
-            clear()
-            titulo("EDITAR VIAJE SELECCIONADO")
-            print(f"Viaje actual: {viaje['origen']} -> {viaje['destino']} ({viaje['fecha']})\n")
-            
-            print("1) Editar Origen")
-            print("2) Editar Destino")
-            print("3) Editar Fecha")
-            print("4) Volver (cancelar)")
-            
-            opcion = input("Seleccione opción: ").strip()
-            
-            if opcion == "1":
-                origenvalido = False
-                while not origenvalido:
-                    nuevo_origen = input("\nIngrese el nuevo origen: ").capitalize()
-                    if nuevo_origen.strip() == "":
-                        print("El origen no puede estar vacío.")
-                    elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_origen):
-                        print("El origen solo debe contener letras y espacios.")
-                    else:
-                        viaje["origen"] = nuevo_origen
-                        print("Origen actualizado correctamente.")
-                        origenvalido = True
-                        
-            elif opcion == "2":
-                destinovalido = False
-                while not destinovalido:
-                    nuevo_destino = input("\nIngrese el nuevo destino: ").capitalize()
-                    if nuevo_destino.strip() == "":
-                        print("El destino no puede estar vacío.")
-                    elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_destino):
-                        print("El destino solo debe contener letras y espacios.")
-                    else:
-                        viaje["destino"] = nuevo_destino
-                        print("Destino actualizado correctamente.")
-                        destinovalido = True
-                        
-            elif opcion == "3":
-                fechaValida = False
-                while fechaValida == False:
-                    nueva_fecha = input("Ingrese la nueva fecha (dd/mm/aaaa): ")
-                    try:
-                        fechaConvertida = datetime.strptime(nueva_fecha, "%d/%m/%Y").date()
-                        hoy = datetime.now().date()
-                        if fechaConvertida < hoy:
-                            print("\nLa fecha ingresada ya pasó. Ingrese una fecha futura.\n")
-                        else:
-                            viaje["fecha"] = nueva_fecha
-                            print("Fecha actualizada correctamente.")
-                            fechaValida = True
-                    except ValueError:
-                        print("\nFormato no válido. Use el formato dd/mm/aaaa.\n")
-                        
-            elif opcion == "4":
-                print("\nEdición de viaje cancelada.")
-            
-            else:
-                print("Opción no válida.")
-
-        else:
-            print("Número de viaje no válido.")
-            
-    except ValueError:
-        print("Debe ingresar un número válido.")
+        print(f"\nIngrese '0' para volver (cancelar).")
         
-    input("\nPresione Enter para continuar...")
+        opcion_ingresada = input("Numero de viaje a editar: ").strip()
+
+        if opcion_ingresada == "0":
+            print("\nEdicion de viaje cancelada.")
+            input("\nPresione ENTER para continuar...")
+            return
+        
+        try:
+            num = int(opcion_ingresada)
+            if 1 <= num <= len(viajes):
+                viaje = viajes[num - 1]
+                
+                while True: 
+                    clear()
+                    titulo("EDITAR VIAJE SELECCIONADO")
+                    print(f"Viaje actual: {viaje['origen']} -> {viaje['destino']} ({viaje['fecha']})\n")
+                    
+                    print("1. Editar Origen")
+                    print("2. Editar Destino")
+                    print("3. Editar Fecha")
+                    print("4. Volver (viaje seleccionado)")
+                    
+                    opcion = input("Seleccione opcion: ").strip()
+                    
+                    if opcion == "1":
+                        origenvalido = False
+                        while not origenvalido:
+                            nuevo_origen = input("\nIngrese el nuevo origen: ")
+                            if nuevo_origen.strip() == "":
+                                print("El origen no puede estar vacío.")
+                            elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_origen):
+                                print("El origen solo debe contener letras y espacios.")
+                            else:
+                                viaje["origen"] = nuevo_origen
+                                print("Origen actualizado correctamente.")
+                                origenvalido = True
+                                input("\nPresione ENTER para continuar...") 
+                        
+                    elif opcion == "2":
+                        destinovalido = False
+                        while not destinovalido:
+                            nuevo_destino = input("\nIngrese el nuevo destino: ")
+                            if nuevo_destino.strip() == "":
+                                print("El destino no puede estar vacio.")
+                            elif not re.fullmatch(r"[A-Za-zÁÉÍÓÚáéíóúÑñ ]+", nuevo_destino):
+                                print("El destino solo debe contener letras y espacios.")
+                            else:
+                                viaje["destino"] = nuevo_destino
+                                print("Destino actualizado correctamente.")
+                                destinovalido = True
+                                input("\nPresione ENTER para continuar...") 
+                                
+                    elif opcion == "3":
+                        fechaValida = False
+                        while fechaValida == False:
+                            nueva_fecha = input("Ingrese la nueva fecha (dd/mm/aaaa): ")
+                            try:
+                                fechaConvertida = datetime.strptime(nueva_fecha, "%d/%m/%Y").date()
+                                hoy = datetime.now().date()
+                                if fechaConvertida < hoy:
+                                    print("\nLa fecha ingresada ya paso. Ingrese una fecha futura.\n")
+                                else:
+                                    viaje["fecha"] = nueva_fecha
+                                    print("Fecha actualizada correctamente.")
+                                    fechaValida = True
+                                    input("\nPresione ENTER para continuar...") 
+                            except ValueError:
+                                print("\nFormato no valido. Use el formato dd/mm/aaaa.\n")
+                                
+                    elif opcion == "4":
+                        break 
+                    
+                    else:
+                        print("Opcion no valida.")
+                        input("\nPresione ENTER para continuar...")
+
+            else:
+                print("Número de viaje no valido.")
+                input("\nPresione ENTER para continuar...")
+                
+        except ValueError:
+            print("Debe ingresar un numero valido.")
+            input("\nPresione ENTER para continuar...")
+
 
 
 if __name__ == "__main__":
