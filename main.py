@@ -100,7 +100,7 @@ def anotarNuevoViaje():
     
     origenvalido = False
     while not origenvalido:
-        origen = input("\nIngrese el origen: ")
+        origen = input("\nIngrese el origen: ").capitalize()
         
         if origen.strip() == "":
             print("El origen no puede estar vacío.")
@@ -113,7 +113,7 @@ def anotarNuevoViaje():
 
     while not destinovalido:
 
-        destino = input("\nIngrese el destino: ")
+        destino = input("\nIngrese el destino: ").capitalize()
 
         if destino.strip() == "":
             print("El destino no puede estar vacío.")
@@ -208,7 +208,7 @@ def filtrarPorOrigen():
     if len(viajes) == 0:
         print("\nNo hay ningún viaje cargado.\n")
     else:
-        origen_buscado = input("\nIngrese el origen a buscar: ")  
+        origen_buscado = input("\nIngrese el origen a buscar: ").capitalize()
         viajes_filtrados = list(filter(lambda viaje: viaje["origen"] == origen_buscado, viajes))  
         if len(viajes_filtrados) == 0:
             print("\nNo hay viajes desde", origen_buscado,"\n")
