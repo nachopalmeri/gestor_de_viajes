@@ -433,6 +433,7 @@ def mostrarPasajeros(viaje):
     Si no hay, informa que no existen pasajeros cargados.
     """
     if viaje["pasajeros"]:
+        i = 0
         print("Pasajeros:")
         def mostrar_rec(i):
             if i == len(viaje["pasajeros"]):
